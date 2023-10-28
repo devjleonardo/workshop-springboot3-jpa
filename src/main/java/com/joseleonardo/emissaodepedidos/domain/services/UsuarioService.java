@@ -12,6 +12,8 @@ import com.joseleonardo.emissaodepedidos.domain.repositories.UsuarioRepository;
 import com.joseleonardo.emissaodepedidos.domain.services.exceptions.BancoDeDadosException;
 import com.joseleonardo.emissaodepedidos.domain.services.exceptions.RecuroNaoEncontradoException;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class UsuarioService {
 
@@ -47,11 +49,16 @@ public class UsuarioService {
 	}
 	
 	public Usuario atualizar(Long id, Usuario usuarioAtualizado) {
-		Usuario usuarioExistente = usuarioRepository.getReferenceById(id);
-		
-		atualizarDados(usuarioExistente, usuarioAtualizado);
-		
-		return usuarioRepository.save(usuarioExistente);
+		try {
+			Usuario usuarioExistente = usuarioRepository.getReferenceById(id);
+
+			atualizarDados(usuarioExistente, usuarioAtualizado);
+
+			return usuarioRepository.save(usuarioExistente);
+		} catch (EntityNotFoundException e) {
+			throw new RecuroNaoEncontradoException(id);
+		}
+
 	}
 
 	private void atualizarDados(Usuario usuarioExistente, Usuario usuarioAtualizado) {
