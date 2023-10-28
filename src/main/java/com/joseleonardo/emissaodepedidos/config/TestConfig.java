@@ -49,6 +49,15 @@ public class TestConfig implements CommandLineRunner {
 		categoriaRepository.saveAll(Arrays.asList(categoria1, categoria2, categoria3));
 		produtoRepository.saveAll(Arrays.asList(produto1, produto2, produto3, produto4, produto5));
 		
+		produto1.addCategoria(categoria2);
+		produto2.addCategoria(categoria1);
+		produto2.addCategoria(categoria3);
+		produto3.addCategoria(categoria3);
+		produto4.addCategoria(categoria3);
+		produto5.addCategoria(categoria2);
+
+		produtoRepository.saveAll(Arrays.asList(produto1, produto2, produto3, produto4, produto5));
+		
 		Usuario usuario1 = new Usuario(null, "Maria Brown", "maria@gmail.com", "988888888", "123456");
 		Usuario usuario2 = new Usuario(null, "Alex Green", "alex@gmail.com", "977777777", "123456");
 
