@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.joseleonardo.emissaodepedidos.domain.entities.Usuario;
 import com.joseleonardo.emissaodepedidos.domain.repositories.UsuarioRepository;
+import com.joseleonardo.emissaodepedidos.domain.services.exceptions.BancoDeDadosException;
 import com.joseleonardo.emissaodepedidos.domain.services.exceptions.RecuroNaoEncontradoException;
 
 @Service
@@ -31,7 +33,17 @@ public class UsuarioService {
 	}
 	
 	public void deletar(Long id) {
-		usuarioRepository.deleteById(id);
+		Optional<Usuario> usuarioExistente = usuarioRepository.findById(id);
+
+		if (usuarioExistente.isPresent()) {
+			try {
+				usuarioRepository.deleteById(id);
+			} catch (DataIntegrityViolationException e) {
+				throw new BancoDeDadosException(e.getMessage());
+			}
+		} else {
+			throw new RecuroNaoEncontradoException(id);
+		}
 	}
 	
 	public Usuario atualizar(Long id, Usuario usuarioAtualizado) {
