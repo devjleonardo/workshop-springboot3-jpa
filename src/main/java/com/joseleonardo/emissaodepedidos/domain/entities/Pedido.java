@@ -40,11 +40,11 @@ public class Pedido implements Serializable {
 	@JoinColumn(name = "cliente_id")
 	private Usuario cliente;
 	
-	@OneToOne(mappedBy = "pedido", cascade = CascadeType.ALL)
-	private Pagamento pagamento;
-	
 	@OneToMany(mappedBy = "id.pedido")
 	private Set<ItemPedido> itens = new HashSet<>();
+	
+	@OneToOne(mappedBy = "pedido", cascade = CascadeType.ALL)
+	private Pagamento pagamento;
 	
 	public Pedido() {
 	}
@@ -100,6 +100,16 @@ public class Pedido implements Serializable {
 
 	public Set<ItemPedido> getItens() {
 		return itens;
+	}
+	
+	public Double getTotal() {
+		double soma = 0.0;
+		
+		for (ItemPedido itemPedido : itens) {
+			soma = soma + itemPedido.getSubTotal();
+		}
+		
+		return soma;
 	}
 	
 	@Override
