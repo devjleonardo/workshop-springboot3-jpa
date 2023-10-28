@@ -8,9 +8,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import com.joseleonardo.emissaodepedidos.domain.entities.Categoria;
 import com.joseleonardo.emissaodepedidos.domain.entities.Pedido;
 import com.joseleonardo.emissaodepedidos.domain.entities.Usuario;
 import com.joseleonardo.emissaodepedidos.domain.entities.enums.StatusPedido;
+import com.joseleonardo.emissaodepedidos.domain.repositories.CategoriaRepository;
 import com.joseleonardo.emissaodepedidos.domain.repositories.PedidoRepository;
 import com.joseleonardo.emissaodepedidos.domain.repositories.UsuarioRepository;
 
@@ -23,9 +25,18 @@ public class TestConfig implements CommandLineRunner {
 	
 	@Autowired
 	private PedidoRepository pedidoRepository;
+	
+	@Autowired
+	private CategoriaRepository categoriaRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
+		Categoria categoria1 = new Categoria(null, "Electronics");
+		Categoria categoria2 = new Categoria(null, "Books");
+		Categoria categoria3 = new Categoria(null, "Computers"); 
+
+		categoriaRepository.saveAll(Arrays.asList(categoria1, categoria2, categoria3));
+		
 		Usuario usuario1 = new Usuario(null, "Maria Brown", "maria@gmail.com", "988888888", "123456");
 		Usuario usuario2 = new Usuario(null, "Alex Green", "alex@gmail.com", "977777777", "123456");
 
