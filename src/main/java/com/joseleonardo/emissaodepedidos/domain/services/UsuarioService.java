@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.joseleonardo.emissaodepedidos.domain.entities.Usuario;
 import com.joseleonardo.emissaodepedidos.domain.repositories.UsuarioRepository;
+import com.joseleonardo.emissaodepedidos.domain.services.exceptions.RecuroNaoEncontradoException;
 
 @Service
 public class UsuarioService {
@@ -22,7 +23,7 @@ public class UsuarioService {
 	public Usuario buscarPorId(Long id) {
 		Optional<Usuario> usuario = usuarioRepository.findById(id);
 		
-		return usuario.get();
+		return usuario.orElseThrow(() -> new RecuroNaoEncontradoException(id));
 	}
 	
 	public Usuario inserir(Usuario usuario) {
